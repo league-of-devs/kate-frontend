@@ -1,8 +1,10 @@
 import React from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons'
+import Search from './Search'
 export default function Home() {
   return (
+    <>
     <header className="header">
       <div className="container">
         <div class="header--kate">
@@ -11,11 +13,13 @@ export default function Home() {
             </svg>
             <span>Kate</span>
         </div>
+        <Search/>
         <div class="header--user">
           <span>Alex</span>
-          <FontAwesomeIcon icon={faUserCircle} size="2x"/>
+          <FontAwesomeIcon className="icon" icon={faUserCircle} size="2x"/>
         </div>
       </div>
     </header>
+    </>
   );
 }

@@ -1,5 +1,13 @@
 .container
     display: flex
-    max-width: 1220px
+    max-width: 1000px
     width: 100%
     margin: 0 auto
+    justify-content: center
+    &.colored
+        background-color: map-get($colors, backgroundContainer)
+    &.main
+        width: 100vw
+        max-width: none
+        border-radius: 50px 50px 0 0
+        min-height: calc(100vh - 146px)

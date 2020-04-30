@@ -1,0 +1,52 @@
+.button
+    position: relative
+    display: flex
+    align-items: center
+    justify-content: center
+    font-size: 18px
+    line-height: 22px
+    padding: 10px 20px
+    margin: 10px
+    color: white
+    box-shadow: 5px 5px 5px rgba(201, 147, 0, 0.25)
+    border-radius: 20px
+    max-width: 180px
+    span ~ .icon
+        margin-left: 10px
+    
+    &.primary
+        background-color: map-get($colors, primary )
+    
+    &.secondary
+        background-color: map-get($colors, secondary )
+    
+    &.success
+        background-color: map-get($colors, success )
+    
+    &.danger
+        background-color: map-get($colors, danger )
+    
+    &.center
+        margin: 10px auto
+
+    &.rounded
+        border-radius: 25px
+        height: 36px
+        width: 36px
+        padding: 0
+
+        span
+            display: none
+
+    .sup
+        position: absolute
+        bottom: 70%
+        right: 0
+        width: 20px
+        height: 20px
+        font-size: 14px
+        background-color: red
+        display: flex
+        align-items: center
+        justify-content: center
+        border-radius: 10px
