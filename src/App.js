@@ -1,40 +1,36 @@
 import React from "react";
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 import "./assets/style/index.sass";
 
-import ProductsPage from "./pages/ProductsPage";
+
 import Header from "./components/Header";
-import Modal from './components/Modal'
+import Home from "./pages/ProductsPage";
+import AuthPage from "./pages/AuthPage";
+import ConfigPage from "./pages/ConfigPage";
+import ProductPage from "./pages/ProductPage";
+
 function App() {
+ 
   return (
     <BrowserRouter>
-      <Header />
-      <div className="container main colored">
-        {/* <nav>
-          <ul>
-          <li>
-          <Link to="/">Home</Link>
-          </li>
-          <li>
-          <Link to="/about">About</Link>
-          </li>
-          <li>
-              <Link to="/product">Product</Link>
-              </li>
-              </ul>
-            </nav> */}
-
-        {/* A <Switch> looks through its children <Route>s and
-          renders the first one that matches the current URL. */}
         <Switch>
-          <Route exact path="/products">
-            <ProductsPage />
+          <Route exact path="/" >
+            <Header type='productsPage'/>
+            <Home/>
           </Route>
-          <Route exact path="/">
-            <Modal title="kkkk" close />
+          <Route exact path="/auth">
+            <Header type='auth'/>
+            <AuthPage/>
+          </Route>
+          <Route path="/product">
+            <Header/>
+            <ProductPage/>
+          </Route>
+          <Route path="/config">
+            <Header/>
+            <ConfigPage/>
           </Route>
         </Switch>
-      </div>
     </BrowserRouter>
   );
 }

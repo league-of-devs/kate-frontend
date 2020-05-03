@@ -14,17 +14,17 @@
         align-items: center
     
     .header--kate
-        display: flex
-        align-items: center
-        flex-direction: column
-        justify-content: flex-start
-        span
-            padding-top: 15px
-            font-size: 32px
-    
+        max-width: 133px
     .header--user
         display: flex
         align-items: center
         span
             padding: 0 15px
             font-size: 32px
+    
+    &.big
+        margin-top: 100px
+        .container
+            justify-content: center
+        .header--kate
+            max-width: 300px

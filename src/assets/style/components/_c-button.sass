@@ -6,29 +6,53 @@
     font-size: 18px
     line-height: 22px
     padding: 10px 20px
-    margin: 10px
+    margin: 10px 0
     color: white
     box-shadow: 5px 5px 5px rgba(201, 147, 0, 0.25)
     border-radius: 20px
-    max-width: 180px
-    span ~ .icon
-        margin-left: 10px
+    cursor: pointer
+
     
     &.primary
         background-color: map-get($colors, primary )
+        &.stroked
+            border-color:  map-get($colors, primary )
+            color: map-get($colors, primary )
+
     
     &.secondary
         background-color: map-get($colors, secondary )
+        &.stroked
+            border-color:  map-get($colors, secondary )
+            color: map-get($colors, secondary )
     
     &.success
         background-color: map-get($colors, success )
+        &.stroked
+            border-color:  map-get($colors, success )
+            color: map-get($colors, success )
     
     &.danger
         background-color: map-get($colors, danger )
-    
-    &.center
-        margin: 10px auto
+        &.stroked
+            border-color:  map-get($colors, danger )
+            color: map-get($colors, danger )
 
+    &.center
+        margin: 10px auto 
+           
+    &:not(.large)
+        max-width: 180px
+           
+    &:not(.iconLeft)
+        span ~ .icon
+            margin-left: 10px
+           
+    &.iconLeft
+        span ~ .icon
+            margin-right: 10px
+            order: -1
+    
     &.rounded
         border-radius: 25px
         height: 36px
@@ -37,6 +61,9 @@
 
         span
             display: none
+    &.stroked
+        background-color: transparent !important
+        border: 3px solid
 
     .sup
         position: absolute
