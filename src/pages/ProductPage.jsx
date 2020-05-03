@@ -57,9 +57,12 @@ export default function ConfigPage() {
             <div className="asks">
               <Card>
                 <h1>Teste</h1>
+                <div>
                 <span className="info">12 usuários perguntaram sobre isso nos últimos 90 dias.</span>
                 <span className="info">12 usuários perguntaram sobre isso nos últimos 90 dias.</span>
                 <span className="info">12 usuários perguntaram sobre isso nos últimos 90 dias.</span>
+
+                </div>
               </Card>
               <div className="kate">
                 <h1>A cor é "vermelho"?</h1>
