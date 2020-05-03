@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 
-
 import Button from "../components/Button";
 import Modal from "../components/Modal";
-import Switch from 'react-switch'
+import Switch from "react-switch";
 import { faArrowLeft, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 export default function ConfigPage(props) {
@@ -35,17 +34,19 @@ export default function ConfigPage(props) {
             <div className="input-field">
               <span>Responder às perguntas automaticamente</span>
               <Switch
-              checked={switchAutomaticAnswers}
-              onChange={()=>{setSwitchAutomaticAnswers(!switchAutomaticAnswers)}}
-              onColor="#4591D7"
-              onHandleColor="#0C29D0"
-              handleDiameter={30}
-              uncheckedIcon={false}
-              checkedIcon={false}
-              boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
-              height={20}
-              width={48}
-              className="react-switch"
+                checked={switchAutomaticAnswers}
+                onChange={() => {
+                  setSwitchAutomaticAnswers(!switchAutomaticAnswers);
+                }}
+                onColor="#4591D7"
+                onHandleColor="#0C29D0"
+                handleDiameter={30}
+                uncheckedIcon={false}
+                checkedIcon={false}
+                boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
+                height={20}
+                width={48}
+                className="react-switch"
               />
             </div>
           </section>
@@ -54,17 +55,19 @@ export default function ConfigPage(props) {
             <div className="input-field">
               <span>Mensagens por WhatsApp</span>
               <Switch
-              checked={switchWhatsapp}
-              onChange={()=>{setSwitchWhatsapp(!switchWhatsapp)}}
-              onColor="#4591D7"
-              onHandleColor="#0C29D0"
-              handleDiameter={30}
-              uncheckedIcon={false}
-              checkedIcon={false}
-              boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
-              height={20}
-              width={48}
-              className="react-switch"
+                checked={switchWhatsapp}
+                onChange={() => {
+                  setSwitchWhatsapp(!switchWhatsapp);
+                }}
+                onColor="#4591D7"
+                onHandleColor="#0C29D0"
+                handleDiameter={30}
+                uncheckedIcon={false}
+                checkedIcon={false}
+                boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
+                height={20}
+                width={48}
+                className="react-switch"
               />
             </div>
             <div className="input-field">
@@ -90,7 +93,9 @@ export default function ConfigPage(props) {
               <p>Nenhuma</p>
             </div>
           </section>
-          <Button> Salvar </Button>
+          <div className="flex">
+            <Button> Salvar </Button>
+          </div>
           <section className="config--section">
             <h1>Para desenvolvedores</h1>
             <div className="input-field">

@@ -4,6 +4,7 @@
     .title
         justify-content: space-between
         align-items: center
+        margin-bottom: 20px
     .banner
         display: flex
         flex-direction: row
@@ -27,20 +28,26 @@
     section
         margin: 40px 0 
         .asks
+            margin: 15px 0
             display: flex
             align-items: flex-start
-            justify-content: space-between
             .kate
+                display: flex
+                justify-content: space-between
+                flex-direction: column
+
                 min-height: 200px
                 margin: 5px
+                margin-left: 20px
                 padding: 5px
+            
                 p
                     font-size: 24px
                     line-height: 29px
                     margin: 10px 0 20px
-                .icons
-                    display: flex
-                    .button.rounded
-                        margin: 0
-                        margin-right: 15px
-                    
+            
+                .button
+                    margin: 0
+                    margin-right: 15px
+            &.answered .card 
+                background-color: map-get($colors, secondary)
