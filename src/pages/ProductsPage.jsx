@@ -14,8 +14,9 @@ export default function ProductsPage() {
   const [modalIntegration, setModalIntegration] = useState(false);
   const [integrationSuccess, setIntegrationSuccess] = useState(false);
   const [searchValue, setSearchValue] = useState("");
-  const [platformValue, setPlatformValue] = useState("");
+  const [platformValue, setPlatformValue] = useState("mercado_livre");
   const [platforms, setPlatforms] = useState([]);
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
     api.get("/kate/platforms")
@@ -25,23 +26,26 @@ export default function ProductsPage() {
         }
       })
       .catch(() => alert("Erro ao fazer requisição dos marketplaces"));
+
+    api.get("/user/products")
+      .then(response => {
+        if (!response.data.error) {
+          setProducts(response.data);
+        }
+      })
+      .catch(() => alert("Erro ao fazer requisição dos produtos"));
   }, []);
 
   function handleSyncWithPlatform() {
-    alert(platformValue);
-
+    api.post("/user/sync_with_platform", { platform: platformValue })
+      .then(response => {
+        if (response.data.link) {
+          window.open(response.data.link, "_blank");
+        }
+      })
+      .catch(() => alert("Erro ao tentar adicionar integração"));
   }
-  const prods = [
-    {
-      id: "MLB1511340551",
-      title: "Produto De Teste - Não Ofertar",
-      platform: "mercado_livre",
-      price: 15,
-      base_price: 15,
-      picture:
-        "http://mlb-s2-p.mlstatic.com/896714-MLB41611013048_052020-O.jpg",
-    },
-  ];
+
   return (
     <>
       <Header type='productsPage' search={searchValue} callback={(e) => { setSearchValue(e); }} />
@@ -51,7 +55,7 @@ export default function ProductsPage() {
           <div className="page products-page">
             <div className="title">
               <h1>Meus anúncios</h1>
-              {prods.length > 0 && (
+              {products.length > 0 && (
                 <Button
                   icon={faPlus}
                   color="success"
@@ -61,16 +65,16 @@ export default function ProductsPage() {
                 />
               )}
             </div>
-            {prods.length > 0 && (
+            {products.length > 0 && (
               <div className="products">
-                {prods.map((prod) => (
+                {products.map((prod) => (
                   prod.title.toUpperCase().includes(searchValue.toUpperCase()) &&
                   <Product prod={prod} key={prod.id} />
                 ))}
               </div>
             )}
 
-            {prods.length === 0 && (
+            {products.length === 0 && (
               <div className="noProducts">
                 <h3>Você ainda não possui nenhuma integração</h3>
                 <p>Mas pode adicionar uma agora :)</p>
