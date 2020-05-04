@@ -10,7 +10,7 @@ import api from "../services/api";
 export default function AuthPage() {
   const history = useHistory();
   const [RegisterMode, setRegisterMode] = useState(false);
-  // const [modalError, setModalError] = useState(false);
+  const [modalSuccess, setModalSuccess] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -65,18 +65,21 @@ export default function AuthPage() {
           api.get("/user/info")
             .then(response => {
               setUser(response.data);
-              history.push("/");
+              setModalSuccess(true);
+              setTimeout(()=>(history.push("/")), 2000);
+              
             });
 
         })
         .catch(error => {
           alert(error);
+          
         });
     }
   };
 
   return (
-    <Modal isOpen={true} title={RegisterMode ? "Cadastro" : "Login"}>
+    <Modal isOpen={true} title={RegisterMode ? "Cadastro" : "Login"} success={modalSuccess} successB={false}>
       {RegisterMode && (
         <div className="input-field">
           <span>Nome</span>

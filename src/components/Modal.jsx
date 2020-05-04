@@ -7,12 +7,14 @@ import Success from "./Success";
 export default function Modal(props) {
   let close = props.close;
   let isOpen = props.isOpen;
-  if (typeof props.isOpen == 'undefined') isOpen = false;
-  if (typeof props.onClose != 'undefined') close = true;
+  let successB = props.successB;
+  if (typeof props.successB == "undefined") successB = true;
+  if (typeof props.isOpen == "undefined") isOpen = false;
+  if (typeof props.onClose != "undefined") close = true;
 
   const end = props.close && !props.title ? "end" : "";
   const titleClass = `modal--title ${end}`;
-  const modalClass = `modal ${props.type}`
+  const modalClass = `modal ${props.type}`;
   return isOpen ? (
     <div className={modalClass}>
       {(close || props.title) && !props.success && (
@@ -25,10 +27,10 @@ export default function Modal(props) {
       )}
       <div className="modal--content">
         {props.success && (
-          <Success isSuccess message={props.message || 'Sucesso!'}/>
+          <Success isSuccess message={props.message || "Sucesso!"}/>
         )}
-        {props.children}
-        {props.success && (
+        {!props.success && props.children}
+        {(props.success && successB) && (
           <Button
             color="secondary"
             onClick={props.onClose}
