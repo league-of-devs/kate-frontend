@@ -9,6 +9,7 @@ import Success from "../components/Success";
 
 
 import api from "../services/api";
+import { useSelector } from "react-redux";
 
 export default function ProductsPage() {
   const [modalIntegration, setModalIntegration] = useState(false);
@@ -17,6 +18,8 @@ export default function ProductsPage() {
   const [platformValue, setPlatformValue] = useState("mercado_livre");
   const [platforms, setPlatforms] = useState([]);
   const [products, setProducts] = useState([]);
+
+  const syncs = useSelector(state => state.Syncs);
 
   useEffect(() => {
     api.get("/kate/platforms")
@@ -55,7 +58,7 @@ export default function ProductsPage() {
           <div className="page products-page">
             <div className="title">
               <h1>Meus anúncios</h1>
-              {products.length > 0 && (
+              {syncs.length > 0 && (
                 <Button
                   icon={faPlus}
                   color="success"
@@ -74,7 +77,7 @@ export default function ProductsPage() {
               </div>
             )}
 
-            {products.length === 0 && (
+            {syncs.length === 0 && (
               <div className="noProducts">
                 <h3>Você ainda não possui nenhuma integração</h3>
                 <p>Mas pode adicionar uma agora :)</p>
@@ -104,21 +107,26 @@ export default function ProductsPage() {
                 <div className="input-field">
                   <span> Marketplace </span>
                   <select name="marketplace" id="marketplace" value={platformValue} onChange={e => { setPlatformValue(e.target.value); }} className="platform">
-                    {platforms.map(platform => <option key={platform} value={platform}>{platform.replace("_", " ")}</option>)}
+                    {platforms.filter(x => !syncs.includes(x)).map(platform => <option key={platform} value={platform}>{platform.replace("_", " ")}</option>)}
+                    {platforms.filter(x => !syncs.includes(x)).length === 0 && (
+                      <option selected disabled>Nenhuma integração disponível</option>
+                    )}
                   </select>
                 </div>
                 <Success message="Tudo certo!" isSuccess={integrationSuccess} />
               </div>
-              <Button
-                type="large"
-                icon={faExternalLinkAlt}
-                onClick={() => {
-                  setIntegrationSuccess(true);
-                  handleSyncWithPlatform();
-                }}
-              >
-                Conceder acesso
-              </Button>
+              {platforms.filter(x => !syncs.includes(x)).length > 0 && (
+                <Button
+                  type="large"
+                  icon={faExternalLinkAlt}
+                  onClick={() => {
+                    setIntegrationSuccess(true);
+                    handleSyncWithPlatform();
+                  }}
+                >
+                  Conceder acesso
+                </Button>
+              )}
             </Modal>
           </div>
         </div>
