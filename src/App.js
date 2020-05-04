@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { BrowserRouter, Switch, Route, useHistory } from "react-router-dom";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 import "./assets/style/index.sass";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -20,6 +20,10 @@ function App() {
     dispatch({ type: "CHANGE_USER_DATA", User });
   };
 
+  const setSyncs = (Syncs) => {
+    dispatch({ type: "CHANGE_SYNCS_DATA", Syncs });
+  };
+
   useEffect(() => {
     if (!user.token) {
       if (!localStorage.getItem("token")) {
@@ -28,9 +32,16 @@ function App() {
         }
       }
   
-      api.get("user/info")
+      api.get("/user/info")
         .then(response => {
           setUser(response.data);
+
+          api.get("/user/syncs")
+            .then(response => {
+              if (!response.data.error) {
+                setSyncs(response.data);
+              }
+            });
         })
         .catch(() => {
           if (document.location.pathname !== "/auth")
