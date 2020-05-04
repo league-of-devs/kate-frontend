@@ -11,9 +11,9 @@ export default function Products(props){
     <>
         <div className="product">
             <div className="product--image">
-                <img src={product.imgUrl} alt="product"/>
+                <img src={product.picture} alt="product"/>
             </div>
-            <span className="product--title text" >{product.name}</span>
+            <span className="product--title text" >{product.title}</span>
             <span className="product--price">{new Intl.NumberFormat('pt-Br', { style: 'currency', currency: 'BRL' }).format(product.price)}</span>
             <Button sup="2" color="secondary" onClick={()=>{history.push('/product')}}>Ver dados</Button>  
         </div>

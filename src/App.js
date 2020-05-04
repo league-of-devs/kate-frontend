@@ -15,7 +15,6 @@ function App() {
     <BrowserRouter>
         <Switch>
           <Route exact path="/" >
-            <Header type='productsPage'/>
             <Home/>
           </Route>
           <Route exact path="/auth">

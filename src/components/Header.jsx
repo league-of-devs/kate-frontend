@@ -14,7 +14,7 @@ export default function Home(props) {
           <img src={logoImg}alt="logoImg"/>  
         </div>
         {props.type !== 'auth' && <>
-          {props.type === 'productsPage' && <Search /> }
+          {props.type === 'productsPage' && <Search value={props.search} callback={e => props.callback(e)}/> }
           <Link to="/config">
           <div className="header--user">
             <span>Alex</span>

@@ -9,11 +9,28 @@ import { faArrowLeft, faTimes } from "@fortawesome/free-solid-svg-icons";
 export default function ConfigPage(props) {
   const history = useHistory();
   const [modalSuccess, setModalSuccess] = useState(false);
-  const [switchWhatsapp, setSwitchWhatsapp] = useState(false);
-  const [switchAutomaticAnswers, setSwitchAutomaticAnswers] = useState(false);
-  function backPage() {
-    history.push("/");
+  
+  let api =
+  {
+    "name": "meunome meusobrenome",
+    "email": "email@email.com",
+    "phone": 0,
+    "api_secret_token": "37fcc517360ad738ecb4f452392d1668b5cb80411f92da90d5242b231f9b",
+    "api_access_token": "ba635a6ff9f58cb4860d410f1c8e68985800c2662ec84f78587c634035cc",
+    "settings": {
+      "whatsapp_notifications": true,
+      "whatsapp_notification_time": 10,
+      "kate_auto_send": true
+    }
   }
+  let user_syncs = ['mercado_livre']
+  
+  const [switchAutomaticAnswers, setSwitchAutomaticAnswers] = useState(api.settings.kate_auto_send);
+  const [switchWhatsapp, setSwitchWhatsapp] = useState(api.settings.whatsapp_notifications);
+  const [userPhone, setUserPhone] = useState(api.phone);
+  const [time, setTime] = useState(api.settings.whatsapp_notification_time);
+
+  function handleRemoveSync(sync){alert(sync)}
   return (
     <div className="container main colored">
       <div className="container">
@@ -24,7 +41,7 @@ export default function ConfigPage(props) {
               icon={faArrowLeft}
               type="stroked iconLeft"
               color="primary"
-              onClick={backPage}
+              onClick={()=>{history.goBack()}}
             >
               Voltar
             </Button>
@@ -72,21 +89,18 @@ export default function ConfigPage(props) {
             </div>
             <div className="input-field">
               <span>Número de telefone</span>
-              <input type="text" placeholder="(99) 99999-9999" />
+              <input type="text" placeholder="(99) 99999-9999" value={userPhone} onChange={e=>{setUserPhone(e.target.val)}}/>
             </div>
             <div className="input-field">
               <span>Tempo mínimo de atraso para notificação</span>
-              <input type="number" placeholder="Tempo em minutos..." min="0" />
+              <input type="number" placeholder="Tempo em minutos..." min="0" value={time} onChange={e=>{setTime(e.target.value)}}/>
             </div>
           </section>
           <section className="config--section">
             <h1>Integrações</h1>
             <div className="input-field">
               <span>Realizadas</span>
-              <p>
-                Mercado Livre
-                <Button icon={faTimes} color="danger" />
-              </p>
+              {user_syncs.map(sync => <p className="sync">{sync.replace('_',' ')} <Button icon={faTimes} color="danger" onClick={()=> {handleRemoveSync(sync)}}/></p>)}
             </div>
             <div className="input-field">
               <span>Disponíveis</span>
@@ -100,11 +114,11 @@ export default function ConfigPage(props) {
             <h1>Para desenvolvedores</h1>
             <div className="input-field">
               <span>Access Token</span>
-              <input type="text" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX" />
+              <input type="text" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX" value={api.api_access_token} disabled/>
             </div>
             <div className="input-field">
               <span>Secret Token</span>
-              <input type="text" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX" />
+              <input type="text" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX" value={api.api_secret_token} disabled/>
             </div>
           </section>
 

@@ -1,25 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { faPlus, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
 import Product from "../components/Product";
 import Button from "../components/Button";
 import Modal from "../components/Modal";
+import Header from "../components/Header";
 import Success from "../components/Success";
 
 export default function ProductsPage(props) {
   const [modalIntegration, setModalIntegration] = useState(false);
   const [integrationSuccess, setIntegrationSuccess] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
+  const [platformValue, setPlatformValue] = useState('');
+  useEffect(() => {
+    document.title = searchValue
+  },[searchValue]);
+  const platforms = ['mercado_livre']
 
+  function handleSyncWithPlatform(){
+    alert(platformValue)
+
+  }
   const prods = [
     {
-      name: "Cafeteira Cafeteira Cafeteira Cafeteira Cafeteira Cafeteira ",
-      imgUrl:
-        "https://c.mlcdn.com.br/1500x1500/cafeteira-eletrica-lenoxx-master-inox30-xicaras-preta-217126900.jpg",
-      price: 245,
+      id: "MLB1511340551",
+      title: "Produto De Teste - Não Ofertar",
+      platform: "mercado_livre",
+      price: 15,
+      base_price: 15,
+      picture:
+        "http://mlb-s2-p.mlstatic.com/896714-MLB41611013048_052020-O.jpg",
     },
   ];
-
   return (
+    <>
+    <Header type='productsPage' search={searchValue} callback={(e)=>{setSearchValue(e)}}/>
+
     <div className="container main colored">
       <div className="container">
         <div className="page products-page">
@@ -38,7 +54,8 @@ export default function ProductsPage(props) {
           {prods.length > 0 && (
             <div className="products">
               {prods.map((prod) => (
-                <Product prod={prod} />
+                prod.title.toUpperCase().includes(searchValue.toUpperCase()) &&
+                <Product prod={prod} key={prod.id}/>
               ))}
             </div>
           )}
@@ -72,9 +89,8 @@ export default function ProductsPage(props) {
             <div className="integration">
               <div className="input-field">
                 <span> Marketplace </span>
-                <select name="marketplace" id="marketplace">
-                  <option value="Mercado Livre">Mercado Livre</option>
-                  <option value="Amazon">Amazon</option>
+                <select name="marketplace" id="marketplace" value={platformValue} onChange={e => {setPlatformValue(e.target.value)}} className="platform">
+                {platforms.map(platform => <option  value={platform}>{platform.replace('_',' ')}</option>)}
                 </select>
               </div>
               <Success message="Tudo certo!" isSuccess={integrationSuccess} />
@@ -84,6 +100,7 @@ export default function ProductsPage(props) {
               icon={faExternalLinkAlt}
               onClick={() => {
                 setIntegrationSuccess(true);
+                handleSyncWithPlatform();
               }}
             >
               Conceder acesso
@@ -92,5 +109,6 @@ export default function ProductsPage(props) {
         </div>
       </div>
     </div>
+    </>
   );
 }
