@@ -1,15 +1,41 @@
 import React from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Route, useHistory } from "react-router-dom";
 import "./assets/style/index.sass";
-
+import { useSelector, useDispatch } from "react-redux";
 
 import Header from "./components/Header";
 import Home from "./pages/ProductsPage";
 import AuthPage from "./pages/AuthPage";
 import ConfigPage from "./pages/ConfigPage";
 import ProductPage from "./pages/ProductPage";
+import api from "./services/api";
 
 function App() {
+
+  const dispatch = useDispatch();
+
+  const user = useSelector(state => state.User);
+
+  const setUser = (User) => {
+    dispatch({ type: "CHANGE_USER_DATA", User });
+  };
+  
+  if (!user.token) {
+    if (!localStorage.getItem("token")) {
+      if (document.location.pathname !== "/auth") {
+        document.location.replace("/auth");
+      }
+    }
+
+    api.get("user/info")
+      .then(response => {
+        setUser(response.data);
+      })
+      .catch(() => {
+        if (document.location.pathname !== "/auth")
+          document.location.replace("/auth");
+      });
+  }
  
   return (
     <BrowserRouter>
