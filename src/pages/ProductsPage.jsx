@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState,useEffect } from "react";
 import { faPlus, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
 import Product from "../components/Product";
@@ -7,15 +7,25 @@ import Modal from "../components/Modal";
 import Header from "../components/Header";
 import Success from "../components/Success";
 
+
+import api from "../services/api";
+
 export default function ProductsPage() {
   const [modalIntegration, setModalIntegration] = useState(false);
   const [integrationSuccess, setIntegrationSuccess] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [platformValue, setPlatformValue] = useState("");
+  const [platforms, setPlatforms] = useState([]);
+
   useEffect(() => {
-    document.title = searchValue;
-  }, [searchValue]);
-  const platforms = ["mercado_livre"];
+    api.get("/kate/platforms")
+      .then(response => {
+        if (!response.data.error) {
+          setPlatforms(response.data);
+        }
+      })
+      .catch(() => alert("Erro ao fazer requisição dos marketplaces"));
+  }, []);
 
   function handleSyncWithPlatform() {
     alert(platformValue);
