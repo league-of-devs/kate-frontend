@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Switch, Route, useHistory } from "react-router-dom";
 import "./assets/style/index.sass";
 import { useSelector, useDispatch } from "react-redux";
@@ -19,23 +19,25 @@ function App() {
   const setUser = (User) => {
     dispatch({ type: "CHANGE_USER_DATA", User });
   };
-  
-  if (!user.token) {
-    if (!localStorage.getItem("token")) {
-      if (document.location.pathname !== "/auth") {
-        document.location.replace("/auth");
-      }
-    }
 
-    api.get("user/info")
-      .then(response => {
-        setUser(response.data);
-      })
-      .catch(() => {
-        if (document.location.pathname !== "/auth")
+  useEffect(() => {
+    if (!user.token) {
+      if (!localStorage.getItem("token")) {
+        if (document.location.pathname !== "/auth") {
           document.location.replace("/auth");
-      });
-  }
+        }
+      }
+  
+      api.get("user/info")
+        .then(response => {
+          setUser(response.data);
+        })
+        .catch(() => {
+          if (document.location.pathname !== "/auth")
+            document.location.replace("/auth");
+        });
+    }
+  }, []);
  
   return (
     <BrowserRouter>
