@@ -13,23 +13,23 @@ function App() {
  
   return (
     <BrowserRouter>
-        <Switch>
-          <Route exact path="/" >
-            <Home/>
-          </Route>
-          <Route exact path="/auth">
-            <Header type='auth'/>
-            <AuthPage/>
-          </Route>
-          <Route path="/product">
-            <Header/>
-            <ProductPage/>
-          </Route>
-          <Route path="/config">
-            <Header/>
-            <ConfigPage/>
-          </Route>
-        </Switch>
+      <Switch>
+        <Route exact path="/" >
+          <Home/>
+        </Route>
+        <Route exact path="/auth">
+          <Header type='auth'/>
+          <AuthPage/>
+        </Route>
+        <Route path="/product">
+          <Header/>
+          <ProductPage/>
+        </Route>
+        <Route path="/config">
+          <Header/>
+          <ConfigPage/>
+        </Route>
+      </Switch>
     </BrowserRouter>
   );
 }
