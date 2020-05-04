@@ -27,8 +27,10 @@ export default function AuthPage() {
     if (user) {
       api.get("/user/full_info")
         .then(response => {
-          if (!response.data.error)
+          if (!response.data.error) {
+            setUser(response.data);
             history.push("/");
+          }
         })
         .catch(() => console.log("Sem login"));
     }
@@ -62,7 +64,6 @@ export default function AuthPage() {
 
           api.get("/user/info")
             .then(response => {
-              console.log(response.data);
               setUser(response.data);
               history.push("/");
             });
