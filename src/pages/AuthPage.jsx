@@ -25,7 +25,7 @@ export default function AuthPage() {
   // VERIFY IF USER IS ALREADY LOGGED IN
   useEffect(() => {
     if (user) {
-      api.get("/user/full_info")
+      api.get("/user/info")
         .then(response => {
           if (!response.data.error) {
             setUser(response.data);
