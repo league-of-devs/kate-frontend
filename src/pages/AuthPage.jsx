@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { faSign } from "@fortawesome/free-solid-svg-icons";
 
@@ -11,7 +12,27 @@ export default function AuthPage() {
   const [RegisterMode, setRegisterMode] = useState(false);
   const [modalError, setModalError] = useState(false);
 
+  const dispatch = useDispatch();
+
+  const user = useSelector(state => state.User);
+
+  const setUser = (User) => {
+    dispatch({ type: "CHANGE_USER_DATA", User });
+  };
+
   const [formData, setFormData] = useState({ });
+
+  // VERIFY IF USER IS ALREADY LOGGED IN
+  useEffect(() => {
+    if (user) {
+      api.get("/user/full_info")
+        .then(response => {
+          if (!response.data.error)
+            history.push("/");
+        })
+        .catch(() => console.log("Sem login"));
+    }
+  }, []);
 
   const handleFormChange = (name, value) => {
     const data = formData;
@@ -37,7 +58,15 @@ export default function AuthPage() {
           if (response.data.error)
             throw new Error(response.data.error);
 
-          history.push("/");
+          localStorage.setItem("token", response.data.token);
+
+          api.get("/user/info")
+            .then(response => {
+              console.log(response.data);
+              setUser(response.data);
+              history.push("/");
+            });
+
         })
         .catch(error => {
           alert(error);
