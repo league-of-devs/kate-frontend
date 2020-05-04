@@ -60,7 +60,7 @@ function App() {
           <Header type='auth'/>
           <AuthPage/>
         </Route>
-        <Route path="/product">
+        <Route path="/product/:platform/:product">
           <Header/>
           <ProductPage/>
         </Route>
