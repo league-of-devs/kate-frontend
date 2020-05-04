@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { faSign } from "@fortawesome/free-solid-svg-icons";
+import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
 
 import Button from "../components/Button";
 import Modal from "../components/Modal";
@@ -10,7 +10,7 @@ import api from "../services/api";
 export default function AuthPage() {
   const history = useHistory();
   const [RegisterMode, setRegisterMode] = useState(false);
-  const [modalError, setModalError] = useState(false);
+  // const [modalError, setModalError] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -93,7 +93,7 @@ export default function AuthPage() {
         <input className="auth" type="password" onChange={(e) => handleFormChange("password", e.target.value)} />
       </div>
       <div className="flex between ycenter">
-        <Button onClick={handleSubmit}>Acessar</Button>
+        <Button onClick={handleSubmit} icon={faSignInAlt}>{RegisterMode ? "Cadastrar" : "Acessar"}</Button>
         <span
           className="link"
           onClick={() => {

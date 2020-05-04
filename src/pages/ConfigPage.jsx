@@ -6,7 +6,7 @@ import Modal from "../components/Modal";
 import Switch from "react-switch";
 import { faArrowLeft, faTimes } from "@fortawesome/free-solid-svg-icons";
 
-export default function ConfigPage(props) {
+export default function ConfigPage() {
   const history = useHistory();
   const [modalSuccess, setModalSuccess] = useState(false);
   
@@ -22,15 +22,15 @@ export default function ConfigPage(props) {
       "whatsapp_notification_time": 10,
       "kate_auto_send": true
     }
-  }
-  let user_syncs = ['mercado_livre']
+  };
+  let user_syncs = ["mercado_livre"];
   
   const [switchAutomaticAnswers, setSwitchAutomaticAnswers] = useState(api.settings.kate_auto_send);
   const [switchWhatsapp, setSwitchWhatsapp] = useState(api.settings.whatsapp_notifications);
   const [userPhone, setUserPhone] = useState(api.phone);
   const [time, setTime] = useState(api.settings.whatsapp_notification_time);
 
-  function handleRemoveSync(sync){alert(sync)}
+  function handleRemoveSync(sync){alert(sync);}
   return (
     <div className="container main colored">
       <div className="container">
@@ -41,7 +41,7 @@ export default function ConfigPage(props) {
               icon={faArrowLeft}
               type="stroked iconLeft"
               color="primary"
-              onClick={()=>{history.goBack()}}
+              onClick={()=>{history.goBack();}}
             >
               Voltar
             </Button>
@@ -89,18 +89,18 @@ export default function ConfigPage(props) {
             </div>
             <div className="input-field">
               <span>Número de telefone</span>
-              <input type="text" placeholder="(99) 99999-9999" value={userPhone} onChange={e=>{setUserPhone(e.target.val)}}/>
+              <input type="text" placeholder="(99) 99999-9999" value={userPhone} onChange={e=>{setUserPhone(e.target.val);}}/>
             </div>
             <div className="input-field">
               <span>Tempo mínimo de atraso para notificação</span>
-              <input type="number" placeholder="Tempo em minutos..." min="0" value={time} onChange={e=>{setTime(e.target.value)}}/>
+              <input type="number" placeholder="Tempo em minutos..." min="0" value={time} onChange={e=>{setTime(e.target.value);}}/>
             </div>
           </section>
           <section className="config--section">
             <h1>Integrações</h1>
             <div className="input-field">
               <span>Realizadas</span>
-              {user_syncs.map(sync => <p className="sync">{sync.replace('_',' ')} <Button icon={faTimes} color="danger" onClick={()=> {handleRemoveSync(sync)}}/></p>)}
+              {user_syncs.map(sync => <p key={sync} className="sync">{sync.replace("_"," ")} <Button icon={faTimes} color="danger" onClick={()=> {handleRemoveSync(sync);}}/></p>)}
             </div>
             <div className="input-field">
               <span>Disponíveis</span>
