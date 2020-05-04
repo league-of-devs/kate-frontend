@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useHistory, useParams } from "react-router-dom";
 import {
   faArrowLeft,
   faTimes,
@@ -11,162 +11,38 @@ import Modal from "../components/Modal";
 import Card from "../components/Card";
 import AnsweredInfo from "../components/AnsweredInfo";
 import UnansweredInfo from "../components/UnansweredInfo";
+import api from "../services/api";
 
-export default function ConfigPage() {
+export default function ConfigPage({ match }) {
   const history = useHistory();
+  const params = useParams();
+
+  console.log(params);
+
   const [modalSuccess, setModalSuccess] = useState(false);
   function backPage() {
     history.push("/");
   }
-  const prod = {
-    name: "Cafeteira Cafeteira Cafeteira Cafeteira Cafeteira Cafeteira ",
-    imgUrl:
-      "https://c.mlcdn.com.br/1500x1500/cafeteira-eletrica-lenoxx-master-inox30-xicaras-preta-217126900.jpg",
-    price: 245,
-  };
 
-  const api = {
-    "id": "MLB1511340551",
-    "title": "Produto De Teste - Não Ofertar",
-    "payment": {
-      "price": 15,
-      "base_price": 15,
-      "currency": "BRL",
-      "accepts_mercadopago": true
-    },
-    "pictures": [
-      {
-        "id": "896714-MLB41611013048_052020",
-        "url": "http://mlb-s2-p.mlstatic.com/896714-MLB41611013048_052020-O.jpg",
-        "secure_url": "https://mlb-s2-p.mlstatic.com/896714-MLB41611013048_052020-O.jpg",
-        "size": "500x248",
-        "max_size": "660x328",
-        "quality": ""
-      }
-    ],
-    "attributes": {
-      "Dimensões": "500mm",
-      "Altura": "13 mm",
-      "Marca": "Marca de Testeb",
-      "Condição do item": "Novo",
-      "Modelo": "modelobbg"
-    },
-    "available_quantity": 1,
-    "user_kindness_level": 1,
-    "suggestions": [],
-    "description": "Item de Teste\nAtributo1: Teste\nAtributo2= Teste 3\n(Atributo5) Cor dfirente\nCor da Peça (Amarelo Testbca)\n(aafa): bbbbbaab\nTamanho: 500mm\nMarca: Intel Core I7\n b",
-    "questions": [
-      {
-        "answered_by": 0,
-        "question": "qUAL A COR?",
-        "answer": null,
-        "pattern": null,
-        "created_at": "2020-05-03T23:14:30.000Z",
-        "answered_at": null,
-        "id": 66,
-        "kindness": 0,
-        "kindness_info": {
-          "greetings": false,
-          "bye": false
-        },
-        "delay": -1588547670,
-        "answered": false,
-        "equals_questions": 0,
-        "suggestion": {
-          "source": "7100734270",
-          "name": "cor",
-          "value": null,
-          "id": 4
-        }
-      },
-      {
-        "answered_by": "kate",
-        "question": "qUAL A MARCA?",
-        "answer": "Boa tarde, fugindo do conoravírus, né? O produto em questão apresenta o(a) marca igual a Marca de Testeb",
-        "pattern": null,
-        "created_at": "2020-05-03T23:55:47.000Z",
-        "answered_at": "2020-05-03T23:55:48.000Z",
-        "id": 67,
-        "kindness": 1,
-        "kindness_info": {
-          "greetings": false,
-          "bye": false
-        },
-        "delay": 1,
-        "answered": true,
-        "equals_questions": 0
-      },
-      {
-        "answered_by": "kate",
-        "question": "Qual o modelo do produto?",
-        "answer": "Boa tarde, fugindo do conoravírus, né? O produto em questão apresenta o(a) modelo igual a modelobbg",
-        "pattern": null,
-        "created_at": "2020-05-04T00:02:00.000Z",
-        "answered_at": "2020-05-04T00:02:01.000Z",
-        "id": 68,
-        "kindness": 1,
-        "kindness_info": {
-          "greetings": false,
-          "bye": false
-        },
-        "delay": 1,
-        "answered": true,
-        "equals_questions": 0
-      },
-      {
-        "answered_by": "kate",
-        "question": "Qual o modelo do produto?",
-        "answer": "Boa tarde, o produto em questão apresenta o(a) modelo igual a modelobbg",
-        "pattern": null,
-        "created_at": "2020-05-04T00:03:00.000Z",
-        "answered_at": "2020-05-04T00:03:01.000Z",
-        "id": 69,
-        "kindness": 1,
-        "kindness_info": {
-          "greetings": false,
-          "bye": false
-        },
-        "delay": 1,
-        "answered": true,
-        "equals_questions": 0
-      },
-      {
-        "answered_by": "kate",
-        "question": "Qual o modelo?",
-        "answer": "Boa tarde, tudo bem com você? O produto em questão apresenta o(a) modelo igual a modelobbg",
-        "pattern": "marca",
-        "created_at": "2020-05-04T00:03:47.000Z",
-        "answered_at": "2020-05-04T00:03:48.000Z",
-        "id": 70,
-        "kindness": 1,
-        "kindness_info": {
-          "greetings": false,
-          "bye": false
-        },
-        "delay": 1,
-        "answered": true,
-        "equals_questions": 1
-      },
-      {
-        "answered_by": "kate",
-        "question": "Qual a marca?",
-        "answer": "Boa tarde, o produto em questão apresenta o(a) marca igual a Marca de Testeb",
-        "pattern": "marca",
-        "created_at": "2020-05-04T00:06:09.000Z",
-        "answered_at": "2020-05-04T00:06:12.000Z",
-        "id": 71,
-        "kindness": 1,
-        "kindness_info": {
-          "greetings": false,
-          "bye": false
-        },
-        "delay": 3,
-        "answered": true,
-        "equals_questions": 1
-      }
-    ],
-    "attribute_suggestions": []
-  }
+
+  const [product, setProduct] = useState(false);
+
+  useEffect(() => {
+
+    if (params.product && params.platform) {
+      api.get("/product/full_info", { params: { platform: params.platform, product: params.product } })
+        .then(response => {
+          if (!response.data.error) {
+            setProduct(response.data);
+          }
+        })
+        .catch(() => alert("Erro ao requisitar produto"));
+    }
+
+  }, []);
+
+  if (!product) return null;
+
   return (
     <div className="container main colored">
       <div className="container">
@@ -184,15 +60,15 @@ export default function ConfigPage() {
           </div>
           <div className="banner">
             <div className="banner--img">
-              <img src={api.pictures[0].url} alt="IMAGEM_PRODUTO" />
+              <img src={product.pictures[0].url} alt="IMAGEM_PRODUTO" />
             </div>
             <div className="banner--subtitle">
-              <p>{api.title}</p>
+              <p>{product.title}</p>
               <p>
                 {new Intl.NumberFormat("pt-Br", {
                   style: "currency",
                   currency: "BRL",
-                }).format(api.payment.price)}
+                }).format(product.payment.price)}
               </p>
             </div>
           </div>
@@ -218,7 +94,7 @@ export default function ConfigPage() {
           </section>
           <section>
             <h1>Perguntas não respondidas</h1>
-            <div className="asks">
+            {/* <div className="asks">
               <Card>
                 <h1>Se eu bater com gelo eu posso danificar o produto?</h1>
                 <span className="info">Em 01/05/2020 às 15:53</span>
@@ -237,7 +113,7 @@ export default function ConfigPage() {
             <div className="asks">
               <Card>
                 <h1>Qual a cor do produto?</h1>
-                  <span className="info">Em 29/04/2020 às 12:24</span>
+                <span className="info">Em 29/04/2020 às 12:24</span>
               </Card>
               <div className="kate">
                 <div className="info">
@@ -253,17 +129,17 @@ export default function ConfigPage() {
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="asks">
-            {api.questions.map(question => !question.answered &&  <>
-              <Card ask={{name:question.question, date: question.created_at}}/>
-              <UnansweredInfo let/>
-              </>)}
-            </div>
+            </div> */}
+            {product.questions && product.questions.map(question => !question.answered && <>
+              <div className="asks">
+                <Card ask={{name:question.question, date: question.created_at}}/>
+                <UnansweredInfo title="Teste" let/>
+              </div>
+            </>)}
           </section>
           <section>
             <h1>Perguntas respondidas</h1>
-            {api.questions.map(
+            {product.questions && product.questions.map(
               (question) =>
                 question.answered && (
                   <>
