@@ -21,7 +21,7 @@ export default function Home(props) {
           {props.type === "productsPage" && <Search value={props.search} callback={e => props.callback(e)}/> }
           <Link to="/config">
             <div className="header--user">
-              <span>{user.name.split(" ")[0]}</span>
+              <span  className="capitalize">{user.name.split(" ")[0]}</span>
               <FontAwesomeIcon className="icon" icon={faUserCircle} size="2x" />
             </div>
           </Link>

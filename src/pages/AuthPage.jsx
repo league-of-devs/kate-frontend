@@ -66,7 +66,7 @@ export default function AuthPage() {
             .then(response => {
               setUser(response.data);
               setModalSuccess(true);
-              setTimeout(()=>(history.push("/")), 2000);
+              setTimeout(()=>(history.push("/")), 1500);
               
             });
 

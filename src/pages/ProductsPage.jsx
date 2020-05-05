@@ -1,4 +1,6 @@
 import React, { useState,useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { faPlus, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
 import Product from "../components/Product";
@@ -9,7 +11,6 @@ import Success from "../components/Success";
 
 
 import api from "../services/api";
-import { useSelector } from "react-redux";
 
 export default function ProductsPage() {
   const [modalIntegration, setModalIntegration] = useState(false);
@@ -20,7 +21,7 @@ export default function ProductsPage() {
   const [products, setProducts] = useState([]);
 
   const syncs = useSelector(state => state.Syncs);
-
+  const history = useHistory();
   useEffect(() => {
     api.get("/kate/platforms")
       .then(response => {
@@ -45,6 +46,7 @@ export default function ProductsPage() {
         if (response.data.link) {
           window.open(response.data.link, "_blank");
         }
+        history.push("/");
       })
       .catch(() => alert("Erro ao tentar adicionar integração"));
   }
@@ -72,7 +74,7 @@ export default function ProductsPage() {
               <div className="products">
                 {products.map((prod) => (
                   prod.title.toUpperCase().includes(searchValue.toUpperCase()) &&
-                  <Product prod={prod} key={prod.id} />
+                  <Product prod={prod} key={prod.id} warns={prod.warns}/>
                 ))}
               </div>
             )}

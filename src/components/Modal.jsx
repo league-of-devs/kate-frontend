@@ -33,7 +33,7 @@ export default function Modal(props) {
         {(props.success && successB) && (
           <Button
             color="secondary"
-            onClick={props.onClose}
+            onClick={props.onClick}
           >Ok</Button>
         )}
       </div>

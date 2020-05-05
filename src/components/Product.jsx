@@ -15,7 +15,7 @@ export default function Products(props){
         </div>
         <span className="product--title text" >{product.title}</span>
         <span className="product--price">{new Intl.NumberFormat("pt-Br", { style: "currency", currency: "BRL" }).format(product.price)}</span>
-        <Button sup="2" color="secondary" onClick={()=>{history.push(`/product/${product.platform}/${product.id}`);}}>Ver dados</Button>  
+        <Button sup={props.warns} color="secondary" type="large" onClick={()=>{history.push(`/product/${product.platform}/${product.id}`);}}>Ver dados</Button>  
       </div>
     </>
   );

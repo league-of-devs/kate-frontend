@@ -23,7 +23,7 @@ function App() {
   const setSyncs = (Syncs) => {
     dispatch({ type: "CHANGE_SYNCS_DATA", Syncs });
   };
-
+  
   useEffect(() => {
     if (!user.token) {
       if (!localStorage.getItem("token")) {
@@ -31,11 +31,11 @@ function App() {
           document.location.replace("/auth");
         }
       }
-  
+      
       api.get("/user/info")
         .then(response => {
           setUser(response.data);
-
+        
           api.get("/user/syncs")
             .then(response => {
               if (!response.data.error) {
@@ -49,7 +49,7 @@ function App() {
         });
     }
   }, []);
- 
+    
   return (
     <BrowserRouter>
       <Switch>

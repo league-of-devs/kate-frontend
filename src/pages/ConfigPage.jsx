@@ -1,36 +1,107 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+
 import { useHistory } from "react-router-dom";
 
 import Button from "../components/Button";
 import Modal from "../components/Modal";
 import Switch from "react-switch";
 import { faArrowLeft, faTimes } from "@fortawesome/free-solid-svg-icons";
+import api from "../services/api";
 
 export default function ConfigPage() {
-  const history = useHistory();
-  const [modalSuccess, setModalSuccess] = useState(false);
-  
-  let api =
-  {
-    "name": "meunome meusobrenome",
-    "email": "email@email.com",
-    "phone": 0,
-    "api_secret_token": "37fcc517360ad738ecb4f452392d1668b5cb80411f92da90d5242b231f9b",
-    "api_access_token": "ba635a6ff9f58cb4860d410f1c8e68985800c2662ec84f78587c634035cc",
-    "settings": {
-      "whatsapp_notifications": true,
-      "whatsapp_notification_time": 10,
-      "kate_auto_send": true
-    }
-  };
-  let user_syncs = ["mercado_livre"];
-  
-  const [switchAutomaticAnswers, setSwitchAutomaticAnswers] = useState(api.settings.kate_auto_send);
-  const [switchWhatsapp, setSwitchWhatsapp] = useState(api.settings.whatsapp_notifications);
-  const [userPhone, setUserPhone] = useState(api.phone);
-  const [time, setTime] = useState(api.settings.whatsapp_notification_time);
+  const dispatch = useDispatch();
 
-  function handleRemoveSync(sync){alert(sync);}
+
+  const setUser = (User) => {
+    dispatch({ type: "CHANGE_USER_DATA", User });
+  };
+
+  const setSyncs = (Syncs) => {
+    dispatch({ type: "CHANGE_SYNCS_DATA", Syncs });
+  };
+
+
+  const history = useHistory();
+  const [modalMessage, setModalMessage] = useState(false);
+  const [modalSuccess, setModalSuccess] = useState(false);
+  const [modalDeleteSync, setModalDeleteSync] = useState(false);
+  const [platforms, setPlatforms] = useState([]);
+  const [deleteSync, setdeleteSync] = useState("");
+
+  const user = useSelector((state) => state.User);
+  const syncs = useSelector((state) => state.Syncs);
+
+  const [switchAutomaticAnswers, setSwitchAutomaticAnswers] = useState(user.settings.kate_auto_send);
+  const [switchWhatsapp, setSwitchWhatsapp] = useState(user.settings.whatsapp_notifications);
+  const [userPhone, setUserPhone] = useState(user.phone);
+  const [time, setTime] = useState(user.settings.whatsapp_notification_time);
+  useEffect(()=>{
+    api.get("/kate/platforms")
+      .then(response => {
+        if (!response.data.error) {
+          setPlatforms(response.data);
+        }
+      })
+      .catch(() => alert("Erro ao fazer requisição dos marketplaces"));
+    api.get("/user/info")
+      .then(response => {
+        setUser(response.data);
+        
+        api.get("/user/syncs")
+          .then(response => {
+            if (!response.data.error) {
+              setSyncs(response.data);
+            }
+          });
+      })
+      .catch(() => {
+        if (document.location.pathname !== "/auth")
+          document.location.replace("/auth");
+      });
+    
+
+  },[]);
+
+  function handleLogout(){
+    api.post("/user/logout")
+      .then(() => {
+        localStorage.removeItem("token");
+        history.push("/auth");
+      });
+  }
+  async function handleRemoveSync(sync) {
+    await api
+      .delete("/user/remove_sync", { data: { platform: sync } })
+      .then((res) => {
+        if(res.data.status === "success"){
+          setModalMessage("Integração removida com sucesso!");
+          setModalSuccess(true);
+
+          api.get("/user/info")
+            .then(response => {
+              setUser(response.data);
+          
+              api.get("/user/syncs")
+                .then(response => {
+                  if (!response.data.error) {
+                    setSyncs(response.data);
+                  }
+                });
+            })
+            .catch(() => {
+              if (document.location.pathname !== "/auth")
+                document.location.replace("/auth");
+            });
+        }
+        else{
+          alert("Algo deu errado ao deletar integração");
+            
+        } 
+      })
+      .catch((err) => alert(err));
+  }
+
   return (
     <div className="container main colored">
       <div className="container">
@@ -41,7 +112,9 @@ export default function ConfigPage() {
               icon={faArrowLeft}
               type="stroked iconLeft"
               color="primary"
-              onClick={()=>{history.goBack();}}
+              onClick={() => {
+                history.goBack();
+              }}
             >
               Voltar
             </Button>
@@ -86,25 +159,56 @@ export default function ConfigPage() {
                 width={48}
                 className="react-switch"
               />
+              <a className="wpp" target="_blank" href="https://api.whatsapp.com/send?phone=+14155238886&text=join%20president-upon"><span>Habilitar WhatsApp! </span> <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>WhatsApp icon</title><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg> </a>
             </div>
             <div className="input-field">
               <span>Número de telefone</span>
-              <input type="text" placeholder="(99) 99999-9999" value={userPhone} onChange={e=>{setUserPhone(e.target.val);}}/>
+              <input
+                type="text"
+                placeholder="(99) 99999-9999"
+                value={userPhone}
+                onChange={(e) => {
+                  setUserPhone(e.target.val);
+                }}
+              />
             </div>
             <div className="input-field">
               <span>Tempo mínimo de atraso para notificação</span>
-              <input type="number" placeholder="Tempo em minutos..." min="0" value={time} onChange={e=>{setTime(e.target.value);}}/>
+              <input
+                type="number"
+                placeholder="Tempo em minutos..."
+                min="0"
+                value={time}
+                onChange={(e) => {
+                  setTime(e.target.value);
+                }}
+              />
             </div>
           </section>
           <section className="config--section">
             <h1>Integrações</h1>
             <div className="input-field">
               <span>Realizadas</span>
-              {user_syncs.map(sync => <p key={sync} className="sync">{sync.replace("_"," ")} <Button icon={faTimes} color="danger" onClick={()=> {handleRemoveSync(sync);}}/></p>)}
+              {syncs.map((sync) => (
+                <p key={sync} className="sync">
+                  {sync.replace("_", " ")}{" "}
+                  <Button
+                    icon={faTimes}
+                    color="danger"
+                    onClick={() => {
+                      setModalDeleteSync(true);
+                      setdeleteSync(sync);
+                    }}
+                  />
+                </p>
+              ))}
             </div>
             <div className="input-field">
               <span>Disponíveis</span>
-              <p>Nenhuma</p>
+              {platforms.filter(x => !syncs.includes(x)).map(sync => <p key={sync} className="sync" value={sync}>{sync.replace("_", " ")}</p>)}
+              {platforms.filter(x => !syncs.includes(x)).length === 0 && (
+                <p selected disabled>Nenhuma integração disponível</p>
+              )}
             </div>
           </section>
           <div className="flex">
@@ -114,22 +218,54 @@ export default function ConfigPage() {
             <h1>Para desenvolvedores</h1>
             <div className="input-field">
               <span>Access Token</span>
-              <input type="text" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX" value={api.api_access_token} disabled/>
+              <input
+                type="text"
+                placeholder="XXXX-XXXX-XXXX-XXXX-XXXX"
+                value={api.api_access_token}
+                disabled
+              />
             </div>
             <div className="input-field">
               <span>Secret Token</span>
-              <input type="text" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX" value={api.api_secret_token} disabled/>
+              <input
+                type="text"
+                placeholder="XXXX-XXXX-XXXX-XXXX-XXXX"
+                value={api.api_secret_token}
+                disabled
+              />
+            </div>
+          </section>
+          <section className="">
+            <h1>Sua sessão</h1>
+            <div className="flex">
+              <Button color="danger" onClick={()=>{handleLogout();}}>Encerrar sessão</Button>
             </div>
           </section>
 
           <Modal
-            isOpen={modalSuccess}
             success
-            message="Alteração feita com sucesso!"
-            onClose={() => {
-              setModalSuccess(false);
+            isOpen={modalSuccess}
+            message={modalMessage}
+            onClick={() => {
+              setModalSuccess(!modalSuccess);
             }}
           />
+          <Modal title="Confirmar ação" close isOpen={modalDeleteSync} onClick={()=>{setModalSuccess(false);}}>
+            <span>
+              {" "}
+              Deseja deletar a integração com{" "}
+              <span className="sync"> {deleteSync.replace("_", " ")} </span> ?
+            </span>
+            <Button
+              onClick={() => {
+                handleRemoveSync(deleteSync);
+                setModalDeleteSync(false);
+              }}
+            >
+              {" "}
+              Confirmar{" "}
+            </Button>
+          </Modal>
         </div>
       </div>
     </div>

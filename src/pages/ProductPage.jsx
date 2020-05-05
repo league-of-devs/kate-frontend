@@ -16,7 +16,7 @@ import api from "../services/api";
 export default function ConfigPage({ match }) {
   const history = useHistory();
   const params = useParams();
-
+  const [counter, setCounter] = useState(0);
   console.log(params);
 
   const [modalSuccess, setModalSuccess] = useState(false);
@@ -24,21 +24,26 @@ export default function ConfigPage({ match }) {
     history.push("/");
   }
 
-
   const [product, setProduct] = useState(false);
 
   useEffect(() => {
-
     if (params.product && params.platform) {
-      api.get("/product/full_info", { params: { platform: params.platform, product: params.product } })
-        .then(response => {
+      api
+        .get("/product/full_info", {
+          params: { platform: params.platform, product: params.product },
+        })
+        .then((response) => {
           if (!response.data.error) {
             setProduct(response.data);
+            setCounter(
+              response.data.questions.filter((x) => x.answered === false).length
+            );
+            console.log(response.data);
           }
         })
         .catch(() => alert("Erro ao requisitar produto"));
     }
-
+   
   }, []);
 
   if (!product) return null;
@@ -72,105 +77,95 @@ export default function ConfigPage({ match }) {
               </p>
             </div>
           </div>
-          <section>
-            <h1>Problemas Encontrados</h1>
-            <div className="asks">
-              <Card ask={{name:"Teste"}}>
-                {/* <h1>Teste</h1> */}
-              </Card>
-              <div className="kate">
-                <div className="info">
-                  <h1>A cor é "vermelho"?</h1>
-                  <p>Baseado em suas respostas</p>
-                </div>
-                <div className="action">
-                  <div className="flex">
-                    <Button icon={faCheck} color="success" />
-                    <Button icon={faTimes} color="danger" />
+          {product.attribute_suggestions.length > 0 && (
+            <section>
+              <h1>Problemas Encontrados</h1>
+              {product.attribute_suggestions.map((problems) => (
+                <>
+                  <div className="asks">
+                    <Card
+                      ask={{
+                        name: `O atributo ${problems.name} do seu produto é ${problems.value} ?`,
+                      }}
+                    />
+                    <div className="kate">
+                      <div className="info">
+                        {/* <h1>A cor é 'vermelho'?</h1> */}
+                        <p>Baseado na descrição</p>
+                      </div>
+                      <div className="action">
+                        <div className="flex">
+                          <Button icon={faCheck} color="success" />
+                          <Button icon={faTimes} color="danger" />
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </div>
-          </section>
-          <section>
-            <h1>Perguntas não respondidas</h1>
-            {/* <div className="asks">
-              <Card>
-                <h1>Se eu bater com gelo eu posso danificar o produto?</h1>
-                <span className="info">Em 01/05/2020 às 15:53</span>
-              </Card>
-              <div className="kate">
-                <div className="info">
-                  <h1>Nenhum padrão identificado</h1>
-                </div>
-                <div className="action">
-                  <div className="flex">
-                    <Button>Responder</Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="asks">
-              <Card>
-                <h1>Qual a cor do produto?</h1>
-                <span className="info">Em 29/04/2020 às 12:24</span>
-              </Card>
-              <div className="kate">
-                <div className="info">
-                  <h1>Kate pode responder essa!</h1>
-                  <p>Segundo o anúncio, a cor é vermelha</p>
-                </div>
-                <div className="action">
-                  <div className="flex">
-                    <Button color="success" type="">
-                      Deixa com a Kate
-                    </Button>
-                    <Button>Responder</Button>
-                  </div>
-                </div>
-              </div>
-            </div> */}
-            {product.questions && product.questions.map(question => !question.answered && <>
-              <div className="asks">
-                <Card ask={{name:question.question, date: question.created_at}}/>
-                <UnansweredInfo title="Teste" let/>
-              </div>
-            </>)}
-          </section>
+                </>
+              ))}
+            </section>
+          )}
+          {!!counter && (
+            <section>
+              <h1>Perguntas não respondidas</h1>
+              {product.questions.map(
+                (question) =>
+                  !question.answered && (
+                    <>
+                      <div className="asks">
+                        <Card
+                          ask={{
+                            name: question.question,
+                            date: question.created_at,
+                          }}
+                        />
+                        <UnansweredInfo title="Teste" let />
+                      </div>
+                    </>
+                  )
+              )}
+            </section>
+          )}
+
           <section>
             <h1>Perguntas respondidas</h1>
-            {product.questions && product.questions.map(
-              (question) =>
-                question.answered && (
-                  <>
-                    <div className="asks">
-                      <Card
-                        ask={{
-                          name: question.question,
-                          date: question.created_at,
-                        }}
-                      />
-                      <AnsweredInfo
-                        type="question"
-                        info={[question.pattern, question.equals_questions]}
-                      />
-                    </div>
-                    <div className="asks answered">
-                      <Card
-                        ask={{
-                          name: question.answer,
-                          clientName: question.answered_by,
-                          date: question.answered_at,
-                        }}
-                      />
-                      <AnsweredInfo
-                        type="answer"
-                        info={["120", question.kindness, question.answered_by]}
-                      />
-                    </div>
-                  </>
-                )
-            )}
+            {product.questions &&
+              product.questions.map(
+                (question) =>
+                  question.answered && (
+                    <>
+                      <div className="asks">
+                        <Card
+                          ask={{
+                            name: question.question,
+                            date: question.created_at,
+                          }}
+                        />
+                        <AnsweredInfo
+                          type="question"
+                          info={[question.pattern, question.equals_questions]}
+                        />
+                      </div>
+                      <div className="asks answered">
+                        <Card
+                          ask={{
+                            name: question.answer,
+                            clientName: question.answered_by,
+                            date: question.answered_at,
+                          }}
+                        />
+                        <AnsweredInfo
+                          type="answer"
+                          info={[
+                            question.delay,
+                            question.kindness,
+                            question.answered_by,
+                          ]}
+                        />
+                      </div>
+                    </>
+                  )
+              )}
           </section>
         </div>
       </div>
