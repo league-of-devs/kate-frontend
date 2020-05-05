@@ -46,6 +46,16 @@ export default function ConfigPage({ match }) {
    
   }, []);
 
+  function handleUpdateDescript(suggestion){
+    console.log(suggestion.id);
+    api.post("/user/suggestion/attribute",{"suggestion": suggestion.id, accept:true}).then(res => alert(res.data)).catch(err => alert(err));
+    // document.location.reload();
+  }
+  function handleDeleteSuggetion(suggestion){
+    console.log(suggestion.id);
+    api.post("/user/suggestion/attribute",{"suggestion": suggestion.id, accept:false}).then(res => alert(res.data)).catch(err => alert(err));
+    // document.location.reload();
+  }
   if (!product) return null;
 
   return (
@@ -90,13 +100,12 @@ export default function ConfigPage({ match }) {
                     />
                     <div className="kate">
                       <div className="info">
-                        {/* <h1>A cor é 'vermelho'?</h1> */}
                         <p>Baseado na descrição</p>
                       </div>
                       <div className="action">
                         <div className="flex">
-                          <Button icon={faCheck} color="success" />
-                          <Button icon={faTimes} color="danger" />
+                          <Button icon={faCheck} onClick={()=>handleUpdateDescript(problems)} color="success" />
+                          <Button icon={faTimes} onClick={()=>handleDeleteSuggetion(problems)} color="danger" />
                         </div>
                       </div>
                     </div>

@@ -102,6 +102,18 @@ export default function ConfigPage() {
       .catch((err) => alert(err));
   }
 
+  async function handleSave(){
+    api.put("/user/edit_info",{
+      "name": user.name,
+      "email": user.email,
+      "phone": userPhone,
+      "settings": {
+        "whatsapp_notifications":switchWhatsapp,
+        "kate_auto_send": switchAutomaticAnswers,
+        "whatsapp_notification_time": time
+      }
+    }).then(res => alert("success")).catch(err => alert("erro " + err));
+  }
   return (
     <div className="container main colored">
       <div className="container">
@@ -212,7 +224,7 @@ export default function ConfigPage() {
             </div>
           </section>
           <div className="flex">
-            <Button> Salvar </Button>
+            <Button onClick={()=>handleSave()}> Salvar </Button>
           </div>
           <section className="config--section">
             <h1>Para desenvolvedores</h1>
