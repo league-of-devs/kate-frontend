@@ -180,7 +180,7 @@ export default function ConfigPage() {
                 placeholder="(99) 99999-9999"
                 value={userPhone}
                 onChange={(e) => {
-                  setUserPhone(e.target.val);
+                  setUserPhone(e.target.value);
                 }}
               />
             </div>
